@@ -1,0 +1,1 @@
+Note: You'll need to add ic_launcher.png files to the drawable folders. For now, the build may fail without them.

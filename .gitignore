@@ -1,0 +1,46 @@
+# Gradle
+.gradle/
+build/
+*/build/
+gradle-app.setting
+
+# Local configuration
+local.properties
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# LibGDX
+/android/libs/armeabi/
+/android/libs/armeabi-v7a/
+/android/libs/arm64-v8a/
+/android/libs/x86/
+/android/libs/x86_64/
+
+# Outputs
+*.apk
+*.ap_
+*.aab
+
+# Android SDK
+~/android-sdk/
+
+# Tilde directory (SDK location)
+~/
+
+# Generated files
+bin/
+gen/

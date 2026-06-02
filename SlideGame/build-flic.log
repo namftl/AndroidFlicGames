@@ -1,0 +1,34 @@
+> Task :android:preBuild UP-TO-DATE
+> Task :android:preDebugBuild UP-TO-DATE
+> Task :android:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :core:compileJava UP-TO-DATE
+> Task :core:processResources NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :android:javaPreCompileDebug UP-TO-DATE
+> Task :android:checkDebugAarMetadata FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':android:checkDebugAarMetadata'.
+> Could not resolve all files for configuration ':android:debugRuntimeClasspath'.
+   > Could not find com.github.50ButtonsEach:flic2lib-android:1.1.1.
+     Searched in the following locations:
+       - file:/Users/noam.fattal/.m2/repository/com/github/50ButtonsEach/flic2lib-android/1.1.1/flic2lib-android-1.1.1.pom
+       - https://repo.maven.apache.org/maven2/com/github/50ButtonsEach/flic2lib-android/1.1.1/flic2lib-android-1.1.1.pom
+       - https://dl.google.com/dl/android/maven2/com/github/50ButtonsEach/flic2lib-android/1.1.1/flic2lib-android-1.1.1.pom
+       - https://oss.sonatype.org/content/repositories/snapshots/com/github/50ButtonsEach/flic2lib-android/1.1.1/flic2lib-android-1.1.1.pom
+       - https://oss.sonatype.org/content/repositories/releases/com/github/50ButtonsEach/flic2lib-android/1.1.1/flic2lib-android-1.1.1.pom
+       - https://jitpack.io/com/github/50ButtonsEach/flic2lib-android/1.1.1/flic2lib-android-1.1.1.pom
+     Required by:
+         project :android
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1s
+4 actionable tasks: 1 executed, 3 up-to-date

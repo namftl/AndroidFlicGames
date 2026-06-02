@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x SlideGame/gradlew)",
+      "Bash(chmod +x gradlew)",
+      "Bash(python3 *)",
+      "Bash(./gradlew tasks *)",
+      "Bash(curl -L -o gradlew https://raw.githubusercontent.com/gradle/gradle/master/gradlew)",
+      "Bash(./gradlew *)"
+    ]
+  }
+}
