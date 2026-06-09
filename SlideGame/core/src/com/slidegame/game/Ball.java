@@ -1,7 +1,9 @@
 package com.slidegame.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -23,7 +25,60 @@ public class Ball {
         this.velocity = new Vector2(0, 0);
         this.radius = radius;
         this.visible = true;
-        this.texture = new Texture(Gdx.files.internal("ball.png"));
+        this.texture = createGlowingBallTexture(512);
+    }
+
+    private Texture createGlowingBallTexture(int size) {
+        Pixmap pixmap = new Pixmap(size, size, Pixmap.Format.RGBA8888);
+
+        int centerX = size / 2;
+        int centerY = size / 2;
+        float maxRadius = size / 2f;
+
+        // Draw from outside to inside for proper layering
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                float dx = x - centerX;
+                float dy = y - centerY;
+                float distance = (float) Math.sqrt(dx * dx + dy * dy);
+                float normalizedDist = distance / maxRadius;
+
+                if (normalizedDist <= 1.0f) {
+                    // Create glow effect with multiple layers
+                    float alpha = 1.0f - normalizedDist;
+                    alpha = (float) Math.pow(alpha, 0.5); // Soften falloff
+
+                    // Color gradient: bright cyan core to deep blue edges
+                    float r, g, b;
+                    if (normalizedDist < 0.3f) {
+                        // Bright cyan/white core
+                        r = 0.5f + (1.0f - normalizedDist / 0.3f) * 0.5f;
+                        g = 0.8f + (1.0f - normalizedDist / 0.3f) * 0.2f;
+                        b = 1.0f;
+                    } else if (normalizedDist < 0.7f) {
+                        // Mid blue glow
+                        float t = (normalizedDist - 0.3f) / 0.4f;
+                        r = 0.2f * (1.0f - t);
+                        g = 0.6f * (1.0f - t);
+                        b = 1.0f;
+                    } else {
+                        // Outer glow (soft edge)
+                        float t = (normalizedDist - 0.7f) / 0.3f;
+                        r = 0.1f * (1.0f - t);
+                        g = 0.4f * (1.0f - t);
+                        b = 0.8f;
+                        alpha *= (1.0f - t); // Fade out at edges
+                    }
+
+                    pixmap.setColor(r, g, b, alpha);
+                    pixmap.drawPixel(x, y);
+                }
+            }
+        }
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
     }
 
     public void update(float delta) {

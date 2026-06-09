@@ -31,11 +31,15 @@ public class CelebrationScreen implements Screen {
             return;
         }
 
-        Gdx.gl.glClearColor(0.0f, 0.5f, 0.0f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
+        game.batch.begin();
+        game.batch.draw(game.backgroundTexture, 0, 0, SlideGame.VIRTUAL_WIDTH, SlideGame.VIRTUAL_HEIGHT);
+        game.batch.end();
 
         game.batch.begin();
         game.font.getData().setScale(3.0f);

@@ -24,9 +24,19 @@ public class MainMenuScreen implements Screen {
     private float flicModeButtonWidth;
     private float flicModeButtonHeight;
 
+    private float rocketModeButtonX;
+    private float rocketModeButtonY;
+    private float rocketModeButtonWidth;
+    private float rocketModeButtonHeight;
+
+    private float platformerModeButtonX;
+    private float platformerModeButtonY;
+    private float platformerModeButtonWidth;
+    private float platformerModeButtonHeight;
+
     private static final float BUTTON_WIDTH = 300f;
-    private static final float BUTTON_HEIGHT = 100f;
-    private static final float BUTTON_SPACING = 40f;
+    private static final float BUTTON_HEIGHT = 80f;
+    private static final float BUTTON_SPACING = 20f;
 
     public MainMenuScreen(final SlideGame game) {
         this.game = game;
@@ -38,25 +48,42 @@ public class MainMenuScreen implements Screen {
         float centerX = SlideGame.VIRTUAL_WIDTH / 2f;
         float centerY = SlideGame.VIRTUAL_HEIGHT / 2f;
 
+        float totalHeight = (BUTTON_HEIGHT * 4) + (BUTTON_SPACING * 3);
+        float startY = centerY + totalHeight / 2f - BUTTON_HEIGHT;
+
         normalModeButtonWidth = BUTTON_WIDTH;
         normalModeButtonHeight = BUTTON_HEIGHT;
         normalModeButtonX = centerX - BUTTON_WIDTH / 2f;
-        normalModeButtonY = centerY + BUTTON_SPACING / 2f;
+        normalModeButtonY = startY;
 
         flicModeButtonWidth = BUTTON_WIDTH;
         flicModeButtonHeight = BUTTON_HEIGHT;
         flicModeButtonX = centerX - BUTTON_WIDTH / 2f;
-        flicModeButtonY = centerY - BUTTON_HEIGHT - BUTTON_SPACING / 2f;
+        flicModeButtonY = startY - BUTTON_HEIGHT - BUTTON_SPACING;
+
+        rocketModeButtonWidth = BUTTON_WIDTH;
+        rocketModeButtonHeight = BUTTON_HEIGHT;
+        rocketModeButtonX = centerX - BUTTON_WIDTH / 2f;
+        rocketModeButtonY = startY - (BUTTON_HEIGHT + BUTTON_SPACING) * 2;
+
+        platformerModeButtonWidth = BUTTON_WIDTH;
+        platformerModeButtonHeight = BUTTON_HEIGHT;
+        platformerModeButtonX = centerX - BUTTON_WIDTH / 2f;
+        platformerModeButtonY = startY - (BUTTON_HEIGHT + BUTTON_SPACING) * 3;
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.shapeRenderer.setProjectionMatrix(camera.combined);
+
+        game.batch.begin();
+        game.batch.draw(game.backgroundTexture, 0, 0, SlideGame.VIRTUAL_WIDTH, SlideGame.VIRTUAL_HEIGHT);
+        game.batch.end();
 
         handleInput();
 
@@ -79,6 +106,14 @@ public class MainMenuScreen implements Screen {
                 flicModeButtonX + 90,
                 flicModeButtonY + flicModeButtonHeight / 2f + 10);
 
+        game.font.draw(game.batch, "Rocket Mode",
+                rocketModeButtonX + 70,
+                rocketModeButtonY + rocketModeButtonHeight / 2f + 10);
+
+        game.font.draw(game.batch, "Platformer Mode",
+                platformerModeButtonX + 50,
+                platformerModeButtonY + platformerModeButtonHeight / 2f + 10);
+
         game.batch.end();
     }
 
@@ -91,11 +126,21 @@ public class MainMenuScreen implements Screen {
         game.shapeRenderer.setColor(1.0f, 0.5f, 0.0f, 0.8f);
         game.shapeRenderer.rect(flicModeButtonX, flicModeButtonY, flicModeButtonWidth, flicModeButtonHeight);
 
+        game.shapeRenderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
+        game.shapeRenderer.rect(rocketModeButtonX, rocketModeButtonY, rocketModeButtonWidth, rocketModeButtonHeight);
+
+        game.shapeRenderer.setColor(0.5f, 0.0f, 0.8f, 0.8f);
+        game.shapeRenderer.rect(platformerModeButtonX, platformerModeButtonY, platformerModeButtonWidth, platformerModeButtonHeight);
+
         game.shapeRenderer.setColor(1, 1, 1, 0.2f);
         game.shapeRenderer.rect(normalModeButtonX + 5, normalModeButtonY + 5,
                 normalModeButtonWidth - 10, normalModeButtonHeight - 10);
         game.shapeRenderer.rect(flicModeButtonX + 5, flicModeButtonY + 5,
                 flicModeButtonWidth - 10, flicModeButtonHeight - 10);
+        game.shapeRenderer.rect(rocketModeButtonX + 5, rocketModeButtonY + 5,
+                rocketModeButtonWidth - 10, rocketModeButtonHeight - 10);
+        game.shapeRenderer.rect(platformerModeButtonX + 5, platformerModeButtonY + 5,
+                platformerModeButtonWidth - 10, platformerModeButtonHeight - 10);
 
         game.shapeRenderer.end();
     }
@@ -107,18 +152,28 @@ public class MainMenuScreen implements Screen {
 
             if (touchPos.x >= normalModeButtonX && touchPos.x <= normalModeButtonX + normalModeButtonWidth &&
                 touchPos.y >= normalModeButtonY && touchPos.y <= normalModeButtonY + normalModeButtonHeight) {
-                startGame(false);
+                startGame("normal");
             }
 
             if (touchPos.x >= flicModeButtonX && touchPos.x <= flicModeButtonX + flicModeButtonWidth &&
                 touchPos.y >= flicModeButtonY && touchPos.y <= flicModeButtonY + flicModeButtonHeight) {
-                startGame(true);
+                startGame("flic");
+            }
+
+            if (touchPos.x >= rocketModeButtonX && touchPos.x <= rocketModeButtonX + rocketModeButtonWidth &&
+                touchPos.y >= rocketModeButtonY && touchPos.y <= rocketModeButtonY + rocketModeButtonHeight) {
+                startGame("rocket");
+            }
+
+            if (touchPos.x >= platformerModeButtonX && touchPos.x <= platformerModeButtonX + platformerModeButtonWidth &&
+                touchPos.y >= platformerModeButtonY && touchPos.y <= platformerModeButtonY + platformerModeButtonHeight) {
+                startGame("platformer");
             }
         }
     }
 
-    private void startGame(boolean isFlicMode) {
-        game.setScreen(new GameScreen(game, isFlicMode));
+    private void startGame(String mode) {
+        game.setScreen(new GameScreen(game, mode));
     }
 
     @Override
